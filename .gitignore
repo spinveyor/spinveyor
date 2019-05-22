@@ -200,3 +200,9 @@ Temporary Items
 
 # Test data we want to exclude from the repository
 TestData/
+
+# Code
+.vscode/ipch/*
+
+# Secrets
+.env
