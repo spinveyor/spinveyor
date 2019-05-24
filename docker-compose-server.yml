@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+  worker:
+    build: .
+    image: &img worker
+    command: [celery, worker, --app=worker.app, --pool=gevent, --concurrency=1, --loglevel=INFO]
+    environment: 
+      - CELERY_BROKER_URL
+      - MINIO_HOST
+      - MINIO_ACCESS_KEY
+      - MINIO_SECRET_KEY
+      - SPINVEYOR_OUTPUT_BUCKET
+
+    depends_on:
+      - rabbitmq
+    restart: 'no'
+    volumes: 
+      - ./app:/app
+
+  worker-minio:
+    build: .
+    image: *img
+    command: [celery, worker, --app=worker.app, --pool=gevent, --concurrency=1, --queues=spinveyor, --loglevel=INFO]
+    environment: *env
+    depends_on:
+      - rabbitmq
+    restart: 'no'
+    volumes: 
+      - ./app:/app
+
+  rabbitmq:
+    image: rabbitmq:3.7.8
+
+  flower:  
+    image: mher/flower
+    environment:
+      - CELERY_BROKER_URL
+      - FLOWER_PORT=8888
+    ports:  
+      - 8888:8888  
+
+volumes:
