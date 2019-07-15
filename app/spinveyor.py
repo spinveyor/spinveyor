@@ -43,7 +43,7 @@ def spinveyor(senfm, imgdata, recontype, subjectid, verbose):
     print('\n')
     print('Adding reconstruction to queue...\n')
     # Fire off the recon by sending to the Celery queue
-    submit_job_to_queue(recontype, bucket_name, os.path.basename(senfm), os.path.basename(imgdata), subjectid)
+    submit_job_to_queue.delay(recontype, bucket_name, os.path.basename(senfm), os.path.basename(imgdata), subjectid)
 
 def create_bucket_in_object_store(minio_client, bucket):
     try:
