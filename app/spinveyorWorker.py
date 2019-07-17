@@ -17,7 +17,6 @@ app = Celery(include=('tasks'), broker=os.environ['SPINVEYOR_BROKER'], backend=o
 
 logger = get_task_logger(__name__)
 
-#@app.task(bind=True, name='submit_job_to_queue', queue='spinveyor')
 @app.task
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     # Start by forming the nextflow command
