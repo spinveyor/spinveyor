@@ -11,9 +11,10 @@ app = Celery('SV_Worker', broker=os.environ['SPINVEYOR_BROKER'], backend=os.envi
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     # Start by forming the nextflow command
     protonHome = os.environ['PROTON_HOME']
+    nextflowBin = os.environ['NEXTFLOW_BIN']
     s3urlSenMap = 's3://' + os.environ['MINIO_HOST'] + '/' + bucket + '/' + senfm
     s3urlImgData = 's3://' + os.environ['MINIO_HOST'] + '/' + bucket + '/' + imgdata
-    nfCommand = ('nextflow run ' + 'recon' + recontype + '.nf ' + ' --senfm ' +
+    nfCommand = (nextflowBin + ' run ' + 'recon' + recontype + '.nf ' + ' --senfm ' +
                 s3urlSenMap + ' --imgData ' + s3urlImgData + ' --subjectID ' + 
                 subjectID + ' --protonHome ' + protonHome)
 
