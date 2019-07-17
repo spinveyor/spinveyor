@@ -3,60 +3,67 @@
 
 /*
  * Default pipeline parameters. They can be overriden on the command line eg.
- * given `params.foo` specify on the run command line `--foo some_value`.
+ * given `params.subjectID` specify on the run command line `--subjectID CIVIC001`.
  */
-params.workingDir = "$HOME/project"
 params.subjectID = "DefaultSubject"
 params.senFieldMap = "senFM.dat"
-params.MREData = "MRE.dat"
+params.DWIData = "DWI.dat"
 
+// If you use "", you can do string interpolation ala shell scripting
+params.protonHome = "/opt/proton/"
+params.matlabLicense = "1711@matlab.webstore.illinois.edu"
+params.outDir = "$PWD"
+
+// These lines create channels, which are like super variables with the properites of queues of cells in matlab.
 senFMDatFile = file(params.senFieldMap)
-mreDatFile = file(params.MREData)
+dwiDatFile = file(params.DWIData)
 subjectID = Channel.value(params.subjectID)
+matlabLicense = Channel.value(params.matlabLicense)
 
-//    file PGSE_Siemens_twix_dat from datFiles
-
+// Ancilliary variables
+matlabContainerOpts = "-e MLM_LICENSE_FILE=${params.matlabLicense} --shm-size=512M --group-add 61278 --group-add 62046 -v ${params.SpinVeyorHome}:${params.SpinVeyorHome}"
 
 process reconSenFM {
-    
-    module "matlab/R2017b"
-    cpus 6
+    // Work around issue with matlab crashing on checking license in.
+    validExitStatus 0,137
+
+    container = "mrfil/matlab-recon:r2018b-v5.0.10"
+    containerOptions = matlabContainerOpts
+    stageInMode = 'copy'
 
     input:
     file senFM_Siemens_twix_dat from senFMDatFile
-    
     output: 
     file 'senFM.mat' into calibrationData
 
-    shell:
+    script:
     """
-    matlab -nodisplay -nodesktop -r "run('$HOME/startup.m'); reconSenFM_Nextflow('!{senFM_Siemens_twix_dat}');"
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); reconSenFM_Nextflow('${senFM_Siemens_twix_dat}');"
     """
 }
 
+process prepMultibandMRE {
 
-process prepMultibandDWI {
-
-    module "matlab/R2017b"
-    cpus 6
+    container = "mrfil/matlab-recon:r2018b-v5.0.10"
+    containerOptions = matlabContainerOpts
 
     input: 
-    file pgse_Siemens_twix_dat from pgseDatFile
+    file dwi_Siemens_twix_dat from dwiDatFile
     val subjID from subjectID
     file senFM from calibrationData
 
     output: 
     file "${subjID}.h5" into ISMRMRDFiles
 
-    shell:
+    script:
     """
-    matlab -nodisplay -nodesktop -r "run('$HOME/startup.m'); prepMultibandDWI_Nextflow('!{senFM}','!{pgse_Siemens_twix_dat}','${subjID}');"
+    matlab -nodisplay -nodesktop -r "run('${params.SpinVeyorHome}/initializePaths.m'); prepMultibandDWI_Nextflow('${senFM}','${dwi_Siemens_twix_dat}','${subjID}');"
     """
 
 }
 
 process runPGRecon {
-    container = "acerja2/privatepg"
+    container = "mrfil/powergrid"
     containerOptions = "--runtime=nvidia "
 
 
@@ -65,26 +72,32 @@ process runPGRecon {
     file prepFile from ISMRMRDFiles
     
     output: 
-    file 'pcSENSE_Slice*_Rep*_Avg*_Echo*_Phase*_mag.nii' into MagNIIs
-    file 'pcSENSE_Slice*_Rep*_Avg*_Echo*_Phase*_phs.nii' into PhaseNIIs
+    file 'img_Slice*_Rep*_Avg*_Echo*_Phase*_mag.nii' into MagNIIs
+    file 'img_Slice*_Rep*_Avg*_Echo*_Phase*_phs.nii' into PhaseNIIs
 
     shell:
     """
-    /opt/PowerGrid/bin/PowerGridPcSense -i !{prepFile} -x 120 -y 120 -z 4 -n 20 -s 4 -D2 -B 1000 -o ./
+    mpirun -n 6 /opt/PowerGrid/bin/PowerGridPcSense -i !{prepFile} -x 150 -y 150 -z 4 -n 20 -s 6 -D2 -B 1000 -o ./
     """
 
 }
 
-/*
-process convert2dNIIsTo4DNIIs {
+process collectPGOutput {
     
-    module : "fsl/5.0.10"
+    container = "mrfil/matlab-recon:r2018b-v5.0.10"
+    containerOptions = matlabContainerOpts
+    publishDir = "${params.outDir}/${params.subjectID}"
+    input:
+    val subjID from subjectID
+    file magNII from MagNIIs
+    file phaseNII from PhaseNIIs
 
-    input : 
-    files pcSENSE_Slice*_Rep*_Avg*_Echo*_Phase*_mag.nii into MagNIIs
-    files pcSENSE_Slice*_Rep*_Avg*_Echo*_Phase*_phs.nii into PhaseNIIs
-    
-    output :
+    output:
+    file 'img.mat'
+
+    script:
+    """
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); img = collectPowerGridImgOutput(); save img.mat img;"
+    """
 
 }
-*/
