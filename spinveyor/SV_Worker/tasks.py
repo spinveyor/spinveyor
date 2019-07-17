@@ -2,8 +2,10 @@ import os
 import celery 
 import subprocess
 
-from celery import app
+from celery import Celery
 from subprocess import call
+
+app = Celery('SV_Worker', broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
 
 @app.task
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
