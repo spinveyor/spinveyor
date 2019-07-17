@@ -4,7 +4,7 @@ import celery
 from celery import Celery
 from celery.utils.log import get_task_logger
 
-app = Celery(include=('tasks'), broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
+app = Celery('SV_Worker', broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
 
 logger = get_task_logger(__name__)
 
