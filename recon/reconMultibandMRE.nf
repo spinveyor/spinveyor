@@ -6,8 +6,8 @@
  * given `params.subjectID` specify on the run command line `--subjectID CIVIC001`.
  */
 params.subjectID = "DefaultSubject"
-params.senFieldMap = "senFM.dat"
-params.MREData = "MRE.dat"
+params.senfm = "senFM.dat"
+params.imgData = "MRE.dat"
 
 // If you use "", you can do string interpolation ala shell scripting
 params.protonHome = "/opt/proton/"
@@ -15,12 +15,12 @@ params.matlabLicense = "1711@matlab.webstore.illinois.edu"
 params.outDir = "$PWD"
 
 // These lines create channels, which are like super variables with the properites of queues of cells in matlab.
-senFMDatFile = file(params.senFieldMap)
-mreDatFile = file(params.MREData)
+senFMDatFile = file(params.senfm)
+mreDatFile = file(params.imgData)
 matlabLicense = Channel.value(params.matlabLicense)
 
 // Ancilliary variables
-matlabContainerOpts = "-e MLM_LICENSE_FILE=${params.matlabLicense} --shm-size=512M --group-add 61278 --group-add 62046 -v ${params.SpinVeyorHome}:${params.SpinVeyorHome}"
+matlabContainerOpts = "-e MLM_LICENSE_FILE=${params.matlabLicense} --shm-size=512M --group-add 61278 --group-add 62046 -v ${params.protonHome}:${params.protonHome}"
 
 process reconSenFM {    
 // Work around issue with matlab crashing on checking license in.
