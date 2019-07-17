@@ -88,15 +88,15 @@ for jj=1:rInfo.multibandFactor
 end
 
 % Flip Slices
-senMB = flip(senMB,3);
-senMBNav = flip(senMBNav,3);
-FMMB = flip(FMMB,3);
-FMMBNav = flip(FMMBNav,3);
+%senMB = flip(senMB,3);
+%senMBNav = flip(senMBNav,3);
+%FMMB = flip(FMMB,3);
+%FMMBNav = flip(FMMBNav,3);
 %FMImagesMB = flip(FMImagesMB,3);
 
 % reconstruct navigator images
 
-imgNav = fieldCorrectedNavRecon(rInfo,senMBNav,maskMBNav,FMMBNav,'Rbeta',1000,'dims2penalize',[1,1,0],'Niter',20,'L',0); % CLJ: turned up the beta and iterations
+imgNav = fieldCorrectedNavRecon(rInfo,senMBNav,maskMBNav,FMMBNav,'Rbeta',1000,'dims2penalize',[1,1,0],'Niter',10,'L',0); % CLJ: turned up the beta and iterations
 save imgNav.mat imgNav % To be removed in the future 
 % warning('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 % warning('!!!reconstructing with zero PMaps for debugging!!!');

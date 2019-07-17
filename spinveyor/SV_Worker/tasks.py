@@ -1,21 +1,9 @@
 import os
-import hashlib
 import celery 
 import subprocess
 
-from io import BytesIO
-from urllib.parse import urlparse
-from celery.utils.log import get_task_logger
-from minio import Minio
-from minio.error import BucketAlreadyExists, BucketAlreadyOwnedByYou, NoSuchKey
-from worker import app
-from celery import Celery
+from celery import app
 from subprocess import call
-
-
-app = Celery(include=('tasks'), broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
-
-logger = get_task_logger(__name__)
 
 @app.task
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
