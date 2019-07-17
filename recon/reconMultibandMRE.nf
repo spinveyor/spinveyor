@@ -66,7 +66,7 @@ process runPGRecon {
 
 
     input:
-    val subjID from subjectID
+    //val subjID from subjectID
     file prepFile from ISMRMRDFiles
     
     output: 
@@ -86,7 +86,7 @@ process collectPGOutput {
     containerOptions = matlabContainerOpts
     publishDir = "${params.outDir}/${params.subjectID}"
     input:
-    val subjID from subjectID
+    //val subjID from subjectID
     file magNII from MagNIIs
     file phaseNII from PhaseNIIs
 
