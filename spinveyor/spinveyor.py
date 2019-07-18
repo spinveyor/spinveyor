@@ -2,11 +2,15 @@ import os
 import click
 import minio
 import string
+import celery
+
 from minio import Minio
 from minio.error import BucketAlreadyExists, BucketAlreadyOwnedByYou, NoSuchKey
 from minio.error import ResponseError
 from progress import Progress
-from spinveyorWorker import submit_job_to_queue
+
+from SV_Worker.tasks import submit_job_to_queue
+
 @click.command()
 @click.argument('senfm', type=click.Path(exists=True))
 @click.argument('imgData', type=click.Path(exists=True))
