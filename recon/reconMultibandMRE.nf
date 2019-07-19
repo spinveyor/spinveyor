@@ -51,11 +51,11 @@ process prepMultibandMRE {
     file senFM from calibrationData
 
     output: 
-    file "${subjID}.h5" into ISMRMRDFiles
+    file "${params.subjectID}.h5" into ISMRMRDFiles
 
     script:
     """
-    matlab -nodisplay -nodesktop -r "run('${params.SpinVeyorHome}/initializePaths.m'); prepMultibandMRE_Nextflow('${senFM}','${mre_Siemens_twix_dat}','${params.subjectID}');"
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); prepMultibandMRE_Nextflow('${senFM}','${mre_Siemens_twix_dat}','${params.subjectID}');"
     """
 
 }
@@ -66,7 +66,6 @@ process runPGRecon {
 
 
     input:
-    //val subjID from subjectID
     file prepFile from ISMRMRDFiles
     
     output: 
@@ -75,7 +74,7 @@ process runPGRecon {
 
     shell:
     """
-    mpirun -n 6 /opt/PowerGrid/bin/PowerGridPcSense -i !{prepFile} -x 150 -y 150 -z 4 -n 20 -s 6 -D2 -B 1000 -o ./
+    mpirun --allow-run-as-root -n 6 /opt/PowerGrid/bin/PowerGridPcSenseMPI -i !{prepFile} -x 150 -y 150 -z 4 -n 20 -s 6 -D2 -B 1000 -o ./
     """
 
 }
