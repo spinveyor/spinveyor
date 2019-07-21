@@ -1,0 +1,29 @@
+[Unit]
+Description=SpinVeyor Worker on boot
+After=network.target
+
+[Service]
+EnvironmentFile=/opt/spinveyor/spinveyor.env
+WorkingDirectory=/opt/proton/spinveyor/spinveyor
+Type=forking
+ExecStart=/bin/sh -c '/opt/spinveyor/env/bin/celery \
+  multi start worker -A SV_Worker \
+  --loglevel=${CELERYD_LOG_LEVEL} --pidfile=${CELERYD_PID_FILE} \
+  --logfile=${CELERYD_LOG_FILE}  ${CELERYD_OPTS}'
+ExecStop=/bin/sh -c '/opt/spinveyor/env/bin/celery \
+  multi stopwait worker '
+ExecReload=/bin/sh -c '/opt/spinveyor/env/bin/celery \
+  multi restart worker -A SV_Worker \
+  --loglevel=${CELERYD_LOG_LEVEL} --pidfile=${CELERYD_PID_FILE} \
+  --logfile=${CELERYD_LOG_FILE} ${CELERYD_OPTS}'
+
+
+# Use a dedicated user to run our service
+User=spinveyor
+
+# Disable Python's buffering of STDOUT and STDERR, so that output from the
+# service shows up immediately in systemd's logs
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
