@@ -76,7 +76,7 @@ process runPGRecon {
 
     shell:
     """
-    mpirun --allow-run-as-root -n 6 /opt/PowerGrid/bin/PowerGridPcSenseMPI -i ${prepFile} -x 150 -y 150 -z 4 -n 20 -s 6 -D2 -B 1000 -o ./
+    mpirun --allow-run-as-root -n 6 /opt/PowerGrid/bin/PowerGridPcSenseMPI -i ${prepFile} -n 20 -s 6 -D2 -B 1000 -o ./
     """
 
 }

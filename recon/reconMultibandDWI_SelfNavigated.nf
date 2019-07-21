@@ -80,7 +80,7 @@ process runPGReconNavigators {
     """
 	export OMP_NUM_THREADS=2;
     export OMP_STACKSIZE=32M;
-    /opt/PowerGrid/bin/PowerGridIsmrmrd -i !{prepFile} -I hanning -t 0 -F DFT -x 120 -y 120 -z 2 -n 30 -s 1 -D 2 -B100 -o ./
+    /opt/PowerGrid/bin/PowerGridIsmrmrd -i !{prepFile} -I hanning -t 0 -F DFT -n 30 -s 1 -D 2 -B100 -o ./
     """
 
 }
