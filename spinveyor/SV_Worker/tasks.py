@@ -18,8 +18,9 @@ def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     nfCommand = (nextflowBin + ' run ' + 'recon' + recontype + '.nf ' + ' --senfm ' +
                 s3urlSenMap + ' --imgData ' + s3urlImgData + ' --subjectID ' + 
                 subjectID + ' --protonHome ' + protonHome)
-
+    workDir = protonHome + '/spinveyor/recon'
     print(s3urlSenMap)
     print(s3urlImgData)
     print(nfCommand)
-    call(nfCommand)
+    call(nfCommand, shell=True, cwd=workDir)
+    
