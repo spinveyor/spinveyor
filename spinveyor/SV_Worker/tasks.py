@@ -7,7 +7,8 @@ from subprocess import call
 
 app = Celery('SV_Worker', broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
 
-@app.task
+# set a 12 hour hard limit and a 10 hour soft time limit
+@app.task(time_limit=43200, soft_time_limit=36000)
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     # Start by forming the nextflow command
     protonHome = os.environ['PROTON_HOME']
