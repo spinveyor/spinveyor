@@ -11,6 +11,7 @@ logger = get_task_logger(__name__)
 # Optional configuration, see the application user guide.
 app.conf.update(
     result_expires=3600,
+    task_acks_late = True,
     worker_prefetch_multiplier=1
 )
 
