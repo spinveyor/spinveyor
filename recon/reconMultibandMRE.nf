@@ -61,7 +61,7 @@ process prepMultibandMRE {
 }
 
 process runPGRecon {
-    validExitStatus 0,11
+    validExitStatus 0,11,139
     
     container = "mrfil/powergrid"
     containerOptions = "--runtime=nvidia "
