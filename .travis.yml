@@ -11,13 +11,19 @@ matrix:
 install:
   - pip3 install -r requirements.txt
   - pip3 install pyinstaller
-script: pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
+script: 
+ - | 
+   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py 
+   tar -czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor 
 
-#deploy:
-#  provider: releases
-#  api_key: "GITHUB OAUTH TOKEN"
-#  file: "dist/spinveyor"
-#  skip_cleanup: true
-#  on:
-#    tags: true
-
+deploy: 
+  skip_cleanup: true
+  draft: true
+  overwrite: true
+  provider: releases
+  api_key:
+    secure: H88UE9a4lhgWaaYoPFfeMhCOcJfj83jlkmY9WChg9XjdGfGMYKvFQwL0zXnvO5mONELciLQ18DpW3QFhlmwTI7yg+PsUMZ2sx6avdH9w9mJNTqXgu2xnQhH6qhK0JEB/qDaCg9iXsEYH6FLDfe+ckCNIg59eLek2dsZGUKcRTZWGjIt1gQII/VUoAU8KfluE6Bg2MNo1o/G8JBSF7RGIW8p/886rrt3AzSSEy/WdFQ8kv2EUhvxC75fBo6qdV20gGqhhJAS8iYAnRkfOuggpYU5cRpW+5MAfBDXhIESEb/FF+wVlkaa3Bp69YNLoyR3r8X11SlcirCFOxIo6AZLMcmgMAuSPX3zxooTV3ij0ZjXC7fEEv2/bAl++yI81N1hUECICL5BZ/Dxws6iy45OrtL2dRIHhoeMkG4hSXeRnEZvu75sTof2Ky+4JFMEnTV0PwdjWaq133QMtCbs3avM5sosG6FackWZ1fOxVZVgyHUNa1IX94yLcvmLt774sGCR+gSGrIhqPzAyrahvGTpfetTdTDjWrxOj+cfqXPiS4cLnTvOx1sb267OGL42kZyUnaNfHQ96VNQ0zECchni1jAVnzSStQvhHIU2T98Smffe8i/vo9VkvKMkdWIzmuuMY87V/+ibUb5+7A0F41YYLWxU4P+/Pqtfhw9ImElCIFGbxk=
+  file_glob:
+  file: dist/spinveyor_*.tar.gz
+  on:
+    repo: spinveyor/spinveyor
