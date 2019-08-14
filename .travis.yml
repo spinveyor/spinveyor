@@ -8,9 +8,9 @@ matrix:
     os: osx
     osx_image: xcode10.2
     language: shell
-install:
-- pip3 install -r requirements.txt
-- pip3 install pyinstaller
+  install:
+    - pip3 install -r requirements.txt
+    - pip3 install pyinstaller
 script:
 - |
   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
@@ -27,4 +27,5 @@ deploy:
     - dist/spinveyor_linux.tar.gz
     - dist/spinveyor_osx.tar.gz
   on:
+    condition: $TRAVIS_OS_NAME = osx
     repo: spinveyor/spinveyor
