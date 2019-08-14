@@ -1,32 +1,30 @@
-env:
-  secure: "kfv/VijUbzxWLM3O+jD/Fro+d8cnxRVF9F7Ol3b2JIso5cC/c+ybRDiuvYgVDIDLHLEjqpjviwmF5aljjgUELIL7m7fokLIsEzrg6UzhwHfKCkveATDr0Osy68IzIDNiIkhTw2rvkEjLoQif3hsGSsblWWtZfxubo8uTkdjiewE6c1GEvnfkPk8zg7n7jHpkFygzHBc3pFWdH6PuIN7zm5RRSgBiSrP9R3upqqTTRLGdmh2CHs7nE3jkSJgsqAAc43s06HqwqQF1+C8kULhhxtqIyxfZbwBti0Mt0PZ3sBIkREjiUK7Jh208sDTUj4tQhbRXKBRH3eiylSewku/vbzXEPHIvioXtOSy957GoGFWuYbtnKxCsZcgC5X76JfD8Tl9JnccNZnyd/DvCoXdq6z5UmzMMg4DT4n4PDs30TPGEzfLCjrE+Yk627rgERi6XBnTupodUKaGRsqtf5J9JxTwQT8p0PfGAUI+gK8izxfo/QdDB5ut7gVeLBhH3qUpo075L+AfO1gT8hCeYH22u5yu8XmlQMCkZRU2968LywtRjzbi1QNsNF45skQuh/s0V5tb81H8S2efsovbj6o28KCfXwzqRe+D2EBM+f0d7fmyMFzmBVnx/rRSS62LkUtlQMzZxxImWJzV24qAn5BnMNT4BdQcelq4mnNGHR5P8gPA="
-
-
 language: python
 matrix:
   include:
-    - name: "Python 3.7.1 on Xenial Linux"
-      dist: xenial   # required for Python >= 3.7
-      python: "3.7"
-    - name: "Python 3.7 on macOS"
-      os: osx
-      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-      language: shell       # 'language: python' is an error on Travis CI macOS
+  - name: Python 3.7.1 on Xenial Linux
+    dist: xenial
+    python: '3.7'
+  - name: Python 3.7 on macOS
+    os: osx
+    osx_image: xcode10.2
+    language: shell
 install:
-  - pip3 install -r requirements.txt
-  - pip3 install pyinstaller
-script: 
- - | 
-   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py 
-   tar -czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor 
+- pip3 install -r requirements.txt
+- pip3 install pyinstaller
+script:
+- |
+  pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django
+  spinveyor/spinveyor.py; 
+  tar -czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor
 
-deploy: 
+deploy:
+  provider: releases
   skip_cleanup: true
   draft: true
   overwrite: true
-  provider: releases
-  api_key: "GITHUB_OAUTH"
-  file_glob:
+  api_key:
+    secure: CkBCkzy5lSdixFY1olaFCu8w1O02tBqjRgMmBUvKJCSDNRDiDxcb89TTaCw5vST+OaUrX+jqT0s1EiHAjDNNBguXQduDpSXaMm6E0eJC50sXPGheolI5bpV4gCxnLIKJq9rnHid+HZv7mDXsn17HWwWXSxGs7iYoYvbleSsz+otWfF2H6cA1HXsk7sJ3XiZb/T8YHZzjvgex9pmzq4V+fnmxPotK2cUbY+pwxiOBvoqNlJrxF7BhTf0Lpu+mwy84JkxmHBy+bb4iqCxXHEqjtPaYRBVHgT9osDwaULwJ6pVw4hjlrMKcyzIqDnqENDV4Ce57UN1ncS31twcr6pEUzX+2NzvBMhJLyPsZ/dTH40AJZUyR3/dnM4EqSKX09RiQeez2R8JTpLZgaC3CU3KmANEbu0bcjXN09/jneRIVPNvwd7QA3HI6lrC7C9vQAMv7WcPBEhGONgG5TKLCAZfgo//zurflngyLE1RKvLx3p7doPOOTCs2o3wm5l8ogvcNMaVUvFx7BSH4ZXj/I/qk9EAlc1fSrmc4nn5/7ze1xX3jeqdGpC/iQVCc32hVXbI/JejyVU3X0OQ0hJMhlvMfz7WPBalkAp1auPKfYDP96RnrJihSMkQuGzonwIFzZAaq4O/sdjl+Ta2/bQ43sd2nBQYq6UxoqmLeN3sRGUkzNCek=
+  file_glob: on
   file: dist/spinveyor_*.tar.gz
   on:
     repo: spinveyor/spinveyor
