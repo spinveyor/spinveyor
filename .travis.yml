@@ -15,15 +15,13 @@ script:
 - |
   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
   tar -czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor
-
 deploy:
   skip_cleanup: true
   draft: true
   overwrite: true
   provider: releases
   api_key:
-    secure: qmXFdfdQOup7cdPThUEfz4BDYR2lSRVAfIWC8zwzeJ11wZ+ikck0NzBLzvLZSSopk/sz5gOZ1YdUEDreMPJDxstYp03ZPiR+6UJVZrYxtZlRMJ6lG8l65ogvdT8+kwiGyFPVWV7uksY5sTdEqd6Od5wqTpLCuXIwvUE7lvDeJAhUNA9XXO+BjE3EX4vtqWC94pWO7IeClURbViMb3sbpdxDJiKif0SaUyPtUG384girBqwDS2Xto0Dd4dE4YMg5dGzsWCBd3EdCji7bntpVtDuduu/Ujuao48t5jbRKEoMpzHRvQu/7xNkahS/mec2445Nu2jU2/7fXUPbH8Tb3tfnzbmQ9691wd+ACao8n3kkw5vENOZwszXfkG2R7kUzz/HGQgIkAv0UmhlzwI7z2o7e9o0DljNAnt2h/DToIFEFZYEG02g8nl6EvAbQisTyKyjHjronsAUC9o8UfPRhGnngkh8Yf2bWvx30UN3wG2qGFStSIxK+/pVXix8nwBzQ5zr1PWR1+qxHzAe8ukzMZK+n0tKs5zxWk0q4OCYJY+dJ8tDCdubWIGTXdjkILYJ7VYPS1lANmJVl8L9C0AUnxMjoJoOnmL2Hn5ZIjhQ4sDSW7I5oyXKls+oOr6TeLd+bJ3aqI+pZ5MvilpKp/f+mRZzQ9VxnJQwqFVrMcSCdtXmtQ=
-  file_glob:
+    secure: kby9a+0J0r4HU8+y2RZXToz4DflO5JwBP/L10OYw5fVDCLS5DET8Qf7WyXIpWmkD9NG/NUcRaKxYZ4sbj3CIqfnCcSQc/Duo1k+FwgWzhp+LgmAh5asYQllzfyFzCso+lSMWHMikOTDubA9KlYvNhdrrkPGPTSH6cTxsTkQ7K7YRCZHYAvMvYr6j1lhk7gLjEjtHTdY9abkcNpwk7OR1lQ+ASJ19pgTByiZk6BvanuJWddrXtG6UEOYg0IXRG94rL6H7neZqdMKUUnnuRn472ySymhikjFu/SgeCoivarCR57Av+rh79XxbXeJfWqttFeBikoHs5+a3a2TQkl8KwdbLN2mzUmdaGTFzQ7iu0wWYVWLOeh7CoO+PVqkKWnAnBub9lWaIn4qeLB9RZ2iefUHa06gCzCa5PfwQzPL3xKUSyNbMANK+s6SdcsBjzWiGZtjXTi/ncEV8ojpIC66G+h5UzkJ/sqD0g7NQLgZr45ky9qkjRnYy/2MhlnDtJBRb/G3dTWYLiJutDyGFAW9dQz9igDHI6dCH55t3LRT10moHx7u+T3IUZoID4e/5A2s7QidWd7EWqwrKl8BVQWCQEQm/EzF0NrvBatMu10NuEW48xTLUBfZzYd224EFb3iHNZboQvb1Y2QsKYmXm6Oj4wf1CxO7VMucu0c28xDGRsJls=
   file: dist/spinveyor_*.tar.gz
   on:
     repo: spinveyor/spinveyor
