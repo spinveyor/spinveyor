@@ -13,5 +13,11 @@ install:
   - pip3 install pyinstaller
 script: pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
 
-
+#deploy:
+#  provider: releases
+#  api_key: "GITHUB OAUTH TOKEN"
+#  file: "dist/spinveyor"
+#  skip_cleanup: true
+#  on:
+#    tags: true
 
