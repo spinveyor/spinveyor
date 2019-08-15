@@ -14,16 +14,18 @@ install:
 script:
 - |
   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
-  tar -czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor
+before_deploy:
+- tar czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz
+
 deploy:
   skip_cleanup: true
-  draft: true
   provider: releases
   api_key:
     secure: hjdukeTbjV/eeJuJ1cglAXi1PfR94Vl6AHSMSZunZexBBuohCzsaJo1Unr1Xz6lyFZbIPFjM7oa1a7hYctFn3GmeArqanlPmI4vGPcrQdAM5xkyA6lacYPMSBhKCmfMmb5HIncT+8u7ft4MpprBU2ZExCbONyjq7M6FhifjDJ26ne66zTjLte+LI+NhTmIf0sYMXp/H4wq0yTXyEcNUZS06CkHVHHDvCJv6LiK4wz2IvO3zDhJl7hXEh0nHzTp4bOPsp9kqQubY0Dxg7Ski4DWFiSJImKrK6NVziDeXvWyGGipcVfcb834pYeZ78Ez9zaCpd3oR4TARZOKBi4zLVQEbNDhK4fMLqHEiCi0cD1xqWWdZ4xhu9Xj2hydHjxgBufOuSjehcumPz0Rm3/tvPCcOoZW8A2Vk0NEm/wOdMrpaOkq6AfcpieY0yNI65DzuqR9r8bN+1JSyPoV1YJBVAmb2SCjPmab7hmauznixLvlUAGPBsHBWIRdl29jSxT1HG+DqsgZC1vXSxYyrfQjrq20CgETwfz1VeiQluBxSGZy4erCkGMVChlokDmvYxcdwRzYfQwvIiunpED7KbaNMUo5UBPFT4J+lTCdpunbY/sYWz2k+gds23qvUU3Rx61Cn7qJBB5N7I1l9aBEeOOgrhgo2NSc2kChflRRuolXZA560=
+  file_glob: on
   file: 
-    - dist/spinveyor_linux.tar.gz
-    - dist/spinveyor_osx.tar.gz
+    - dist/spinveyor_*.tar.gz
   on:
-    condition: $TRAVIS_OS_NAME = osx
     repo: spinveyor/spinveyor
+    branch: master
+    tags: true
