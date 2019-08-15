@@ -15,7 +15,7 @@ script:
 - |
   pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django spinveyor/spinveyor.py
 before_deploy:
-- tar czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz
+- tar czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor
 
 deploy:
   skip_cleanup: true
