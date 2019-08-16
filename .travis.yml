@@ -13,7 +13,7 @@ install:
     - pip3 install pyinstaller
 script:
 - |
-pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django --hidden-import=celery.loaders.app --hidden-import=celery.app.amqp --hidden-import=kombu.transport.redis --hidden-import=celery.backends  --hidden-import=celery.backends.redis --hidden-import=celery.app.events --hidden-import=celery.events  spinveyor/spinveyor.py
+  pyinstaller -c --onefile --hidden-import=celery --hidden-import=celery.fixups --hidden-import=celery.fixups.django --hidden-import=celery.loaders.app --hidden-import=celery.app.amqp --hidden-import=kombu.transport.redis --hidden-import=celery.backends  --hidden-import=celery.backends.redis --hidden-import=celery.app.events --hidden-import=celery.events  spinveyor/spinveyor.py
 before_deploy:
 - tar czvf dist/spinveyor_$TRAVIS_OS_NAME.tar.gz dist/spinveyor
 
