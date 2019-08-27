@@ -60,6 +60,17 @@ process prepMultibandMRE {
 
 }
 
+process getNumCores {    
+
+    output: 
+    stdout into numCores
+
+    script:
+    """
+    python3 getNumCores.py
+    """
+}
+
 process runPGRecon {
     validExitStatus 0,11,139
     
@@ -69,14 +80,14 @@ process runPGRecon {
 
     input:
     file prepFile from ISMRMRDFiles
-    
+    val cores from numCores
     output: 
     file 'img_Slice*_Rep*_Avg*_Echo*_Phase*_mag.nii' into MagNIIs
     file 'img_Slice*_Rep*_Avg*_Echo*_Phase*_phs.nii' into PhaseNIIs
 
     shell:
     """
-    mpirun --allow-run-as-root -n 6 /opt/PowerGrid/bin/PowerGridPcSenseMPI_TS -i !{prepFile} -n 30 -D2 -B 1000 -o ./
+    mpirun --allow-run-as-root -n !{cores} /opt/PowerGrid/bin/PowerGridPcSenseMPI_TS -i !{prepFile} -n 30 -D2 -B 1000 -o ./
     """
 
 }
