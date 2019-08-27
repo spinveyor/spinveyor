@@ -92,11 +92,27 @@ process collectPGOutput {
     file phaseNII from PhaseNIIs
 
     output:
-    file 'img.mat'
+    file 'img.mat' into MREImages
 
     script:
     """
     matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); img = collectPowerGridImgOutput(); save img.mat img;"
     """
 
+}
+
+process preprocessMREData {
+    container = "mrfil/matlab-recon:r2018b-v5.0.10"
+    containerOptions = matlabContainerOpts
+    publishDir = "${params.outDir}/${params.subjectID}"
+    input:
+    file imgMat from MREImages
+
+    output:
+    file 'mr_disp.mat'
+
+    script:
+    """
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); load img.mat; proc_mbmre_bet(img);"
+    """
 }
