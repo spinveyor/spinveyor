@@ -11,7 +11,7 @@ logger = get_task_logger(__name__)
 # Optional configuration, see the application user guide.
 app.conf.update(
     result_expires = 2592000, # 30 days for result expiration
-    result_persistant = True,
+    result_persistent = True,
     broker_transport_options = {'visibility_timeout', 86400 }, # 24 hours in seconds
     task_acks_late = True,
     worker_prefetch_multiplier=1
