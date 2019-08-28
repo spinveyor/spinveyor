@@ -12,7 +12,7 @@ logger = get_task_logger(__name__)
 app.conf.update(
     result_expires = 2592000, # 30 days for result expiration
     result_persistent = True,
-    broker_transport_options = {'visibility_timeout', 86400 }, # 24 hours in seconds
+    broker_transport_options = {'visibility_timeout': 86400 }, # 24 hours in seconds
     task_acks_late = True,
     worker_prefetch_multiplier=1
 )
