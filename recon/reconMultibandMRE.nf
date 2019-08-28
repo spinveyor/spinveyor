@@ -67,7 +67,7 @@ process getNumCores {
 
     script:
     """
-    python3 getNumCores.py
+    python3 ${params.protonHome}/spinveyor/recon/getNumCores.py
     """
 }
 
