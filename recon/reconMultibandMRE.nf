@@ -67,7 +67,7 @@ process getNumCores {
 
     script:
     """
-    python3 getNumCores.py
+    /opt/spinveyor/env/bin/python3 ${params.protonHome}/spinveyor/recon/getNumCores.py
     """
 }
 
@@ -75,7 +75,7 @@ process runPGRecon {
     validExitStatus 0,11,139
     
     container = "mrfil/powergrid"
-    containerOptions = "--runtime=nvidia "
+    containerOptions = "--gpus all "
 
 
     input:
