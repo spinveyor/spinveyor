@@ -75,7 +75,7 @@ process runPGRecon {
     validExitStatus 0,11,139
     
     container = "mrfil/powergrid"
-    containerOptions = "--runtime=nvidia "
+    containerOptions = "--gpus all "
 
 
     input:
