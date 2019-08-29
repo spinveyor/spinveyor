@@ -64,7 +64,7 @@ process prepMultibandMRE {
 
 process runPGRecon {
     container = "mrfil/powergrid"
-    containerOptions = "--runtime=nvidia "
+    containerOptions = "--gpus all "
 
 
     input:
