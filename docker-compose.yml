@@ -7,7 +7,7 @@ services:
 
   flower:  
     image: mher/flower
-    command: flower --port=5555 --broker=amqp://RABBITMQ_DEFAULT_USER:RABBITMQ_DEFAULT_PASS@rabbitmq:5672
+    command: flower --port=5555 --broker=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
     ports:  
       - 5555:5555
     depends_on:
