@@ -1,17 +1,17 @@
 version: '3.4'
 services:
-  redis:
-    image: redis
+  rabbitmq:
+    image: rabbitmq
     ports:  
-      - 6379:6379
+      - - 5672:5672
 
   flower:  
     image: mher/flower
-    command: flower --port=5555 --broker=redis://redis:6379/0
+    command: flower --port=5555 --broker=amqp://RABBITMQ_DEFAULT_USER:RABBITMQ_DEFAULT_PASS@rabbitmq:5672
     ports:  
       - 5555:5555
     depends_on:
-      - redis
+      - rabbitmq
    
   nginx:
     image: nginx:latest
