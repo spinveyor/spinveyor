@@ -4,7 +4,8 @@ After=docker.service network-online.target
 Requires=docker.service network-online.target
 
 [Service]
-WorkingDirectory=/opt/proton/spinveyor
+EnvironmentFile=/opt/spinveyor/spinveyor.env
+WorkingDirectory=/opt/spinveyor/proton/spinveyor
 Type=oneshot
 RemainAfterExit=yes
 

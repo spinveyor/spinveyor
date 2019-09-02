@@ -1,23 +1,32 @@
 version: '3.4'
 services:
-  redis:
-    image: redis
-    ports:  
-      - 6379:6379
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS
+    ports:
+      - 5672:5672
+    expose:
+      - 15672/tcp
+      - 15672/udp
 
-  flower:  
+  flower:
     image: mher/flower
-    command: flower --port=5555 --broker=redis://redis:6379/0
-    ports:  
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    command: "flower --port=5555 --broker=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672 --broker-api=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:15672/api"
+    ports:
       - 5555:5555
     depends_on:
-      - redis
-   
+      - rabbitmq
+
   nginx:
     image: nginx:latest
-    ports: 
+    ports:
       - 80:80
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx:/etc/nginx
     depends_on:
       - flower
