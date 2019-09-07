@@ -120,10 +120,26 @@ process preprocessMREData {
     file imgMat from MREImages
 
     output:
-    file 'mr_disp.mat'
+    file 'mr_disp.mat' into mrDisp
 
     script:
     """
     matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); load img.mat; proc_mbmre_bet(img);"
     """
 }
+
+process generateMREReconReport {
+    
+    publishDir = "${params.outDir}/${params.subjectID}"
+    input:
+    file mr_disp from MREImages
+
+    output:
+    file 'mreReport.pdf'
+
+    script:
+    """
+    /opt/spinveyor/env/bin/python3 ${params.protonHome}/spinveyor/recon/Ver1.0/MREReport/generateReportMRE.py ${mr_disp} mreReport.pdf
+    """
+}
+
