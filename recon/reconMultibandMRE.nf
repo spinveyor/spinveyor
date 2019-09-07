@@ -24,7 +24,7 @@ matlabContainerOpts = "-e MLM_LICENSE_FILE=${params.matlabLicense} --shm-size=51
 
 process reconSenFM {    
 // Work around issue with matlab crashing on checking license in.
-    validExitStatus 0,137
+    validExitStatus 0,137,143
 
     container = "mrfil/matlab-recon:r2018b-v5.0.10"
     containerOptions = matlabContainerOpts
@@ -42,7 +42,7 @@ process reconSenFM {
 }
 
 process prepMultibandMRE {
-
+    validExitStatus 0,137,143
     container = "mrfil/matlab-recon:r2018b-v5.0.10"
     containerOptions = matlabContainerOpts
 
@@ -113,6 +113,7 @@ process collectPGOutput {
 }
 
 process preprocessMREData {
+    validExitStatus 0,137,143
     container = "mrfil/matlab-recon:r2018b-v5.0.10"
     containerOptions = matlabContainerOpts
     publishDir = "${params.outDir}/${params.subjectID}"
@@ -120,19 +121,20 @@ process preprocessMREData {
     file imgMat from MREImages
 
     output:
-    file 'mr_disp.mat' into mrDisp
+    file 'mr_disp.mat' into MRDisp
 
     script:
     """
-    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); load img.mat; proc_mbmre_bet(img);"
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); load ${imgMat}; proc_mbmre_bet(img);"
     """
 }
 
 process generateMREReconReport {
     
     publishDir = "${params.outDir}/${params.subjectID}"
+    
     input:
-    file mr_disp from MREImages
+    file mr_disp from MRDisp
 
     output:
     file 'mreReport.pdf'
