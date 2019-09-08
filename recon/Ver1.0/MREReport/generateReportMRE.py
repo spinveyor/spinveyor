@@ -12,7 +12,7 @@ import pdfkit
 
 @click.command()
 @click.argument('matfile', type=click.Path(exists=True))
-@click.argument('outputfile', type=click.Path(exists=True))
+@click.argument('outputfile', type=click.Path())
 
 def generateReportMRE(matfile, outputfile):
 
