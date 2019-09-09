@@ -23,7 +23,7 @@ def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     nfCommand = (nextflowBin + ' run ' + 'recon' + recontype + '.nf ' + ' --senfm ' +
                 s3urlSenMap + ' --imgData ' + s3urlImgData + ' --subjectID ' + 
                 subjectID + ' --protonHome ' + protonHome + ' --outDir ' + s3urlOutDir 
-                + ' --with-report --with-timeline timeline.html') 
+                + ' -with-report -with-timeline timeline.html') 
                 
     workDir = protonHome + '/spinveyor/recon'
     print(s3urlSenMap)
