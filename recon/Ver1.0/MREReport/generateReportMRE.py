@@ -1,4 +1,5 @@
 import click
+import os
 import scipy.io as sio
 from skimage.util import montage
 import numpy as np
@@ -20,13 +21,14 @@ def generateReportMRE(matfile, outputfile):
 
     mat_contents_squeezed = sio.loadmat(matfile,struct_as_record=False, squeeze_me=True)
     mreParams = mat_contents_squeezed['mreParams']
-    templateLoader = jinja2.FileSystemLoader(searchpath="./")
+    templateLoader = jinja2.FileSystemLoader(searchpath=os.path.dirname(os.path.abspath(__file__)))
     templateEnv = jinja2.Environment(loader=templateLoader)
     TEMPLATE_FILE = "mreReportTemplate.j2"
     template = templateEnv.get_template(TEMPLATE_FILE)
     outputText = template.render(matrix_x=mreParams.nx, matrix_y=mreParams.ny, matrix_z=mreParams.nz, fov_x=mreParams.FOVx, fov_y=mreParams.FOVy, fov_z=mreParams.FOVz, oss_snr=round(mreParams.oss_snr,2), current_date_time=str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
-
-    html_file = open('mreReport.html', 'w')
+    
+    htmlFilename = os.path.join(os.path.dirname(os.path.abspath(__file__)),'mreReport.html')
+    html_file = open(htmlFilename, 'w')
     html_file.write(outputText)
     html_file.close()
 
@@ -39,7 +41,7 @@ def generateReportMRE(matfile, outputfile):
         'quiet': ''
     }
 
-    pdfkit.from_file('mreReport.html', outputfile, options=options)
+    pdfkit.from_file(htmlFilename, outputfile, options=options)
 
 def generateT2StackImage(matfile):
     mat_contents = sio.loadmat(matfile)
