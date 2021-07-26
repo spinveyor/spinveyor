@@ -2,9 +2,8 @@ version: '3.4'
 services:
   rabbitmq:
     image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_DEFAULT_USER
-      - RABBITMQ_DEFAULT_PASS
+    volumes:
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
     ports:
       - 5672:5672
     expose:
