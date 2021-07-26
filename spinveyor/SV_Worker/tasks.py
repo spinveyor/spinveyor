@@ -35,8 +35,8 @@ def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
                          access_key=os.environ['MINIO_ACCESS_KEY'],
                          secret_key=os.environ['MINIO_SECRET_KEY'],
                          secure=False)
-    copy_file_to_object_store(minio_client, workDir + '/report.html', outBucket, 'report.html')
-    copy_file_to_object_store(minio_client, workDir + '/timeline.html', outBucket, 'timeline.html')
+    copy_file_to_object_store(minio_client, workDir + '/report.html', outBucket, subjectID + '/report.html')
+    copy_file_to_object_store(minio_client, workDir + '/timeline.html', outBucket, subjectID + '/timeline.html')
 
 
 def copy_file_to_object_store(minio_client, filename, bucket, objectname):

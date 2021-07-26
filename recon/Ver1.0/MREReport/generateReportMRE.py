@@ -27,7 +27,7 @@ def generateReportMRE(matfile, outputfile):
     template = templateEnv.get_template(TEMPLATE_FILE)
     outputText = template.render(matrix_x=mreParams.nx, matrix_y=mreParams.ny, matrix_z=mreParams.nz, fov_x=mreParams.FOVx, fov_y=mreParams.FOVy, fov_z=mreParams.FOVz, oss_snr=round(mreParams.oss_snr,2), current_date_time=str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     
-    htmlFilename = os.path.join(os.path.dirname(os.path.abspath(__file__)),'mreReport.html')
+    htmlFilename = os.path.join(os.getcwd(),'mreReport.html')
     html_file = open(htmlFilename, 'w')
     html_file.write(outputText)
     html_file.close()
@@ -57,7 +57,7 @@ def generateT2StackImage(matfile):
     plt.gca().xaxis.set_major_locator(plt.NullLocator())
     plt.gca().yaxis.set_major_locator(plt.NullLocator())
     plt.margins(0,0)
-    plt.savefig('t2stack.png', dpi=150, bbox_inches='tight')
+    plt.savefig(os.path.join(os.getcwd(),'t2stack.png'), dpi=150, bbox_inches='tight')
 
 
 if __name__ == '__main__':
