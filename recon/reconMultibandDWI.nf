@@ -63,7 +63,7 @@ process prepMultibandMRE {
 }
 
 process runPGRecon {
-    container = "mrfil/powergrid"
+    container = "mrfil/powergrid:v1.1.3"
     containerOptions = "--gpus all "
 
 
