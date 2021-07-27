@@ -3,7 +3,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.7-management
     volumes:
-      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.conf
+      - ${RABBIT_CONFIG_USER}:/etc/rabbitmq/rabbitmq.conf
     ports:
       - 5672:5672
     expose:
