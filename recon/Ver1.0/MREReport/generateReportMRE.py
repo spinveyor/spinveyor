@@ -1,5 +1,6 @@
 import click
 import os
+import shutil
 import scipy.io as sio
 from skimage.util import montage
 import numpy as np
@@ -18,7 +19,8 @@ import pdfkit
 def generateReportMRE(matfile, outputfile):
 
     generateT2StackImage(matfile)
-
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    shutil.copyfile(os.path.join(dir_path,'Illinois-Wordmark-Vertical-Full-Color-RGB.png'),os.path.join(os.getcwd(),'Illinois-Wordmark-Vertical-Full-Color-RGB.png'))
     mat_contents_squeezed = sio.loadmat(matfile,struct_as_record=False, squeeze_me=True)
     mreParams = mat_contents_squeezed['mreParams']
     templateLoader = jinja2.FileSystemLoader(searchpath=os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +40,8 @@ def generateReportMRE(matfile, outputfile):
         'margin-right': '0.75in',
         'margin-bottom': '0.75in',
         'margin-left': '0.75in',
-        'quiet': ''
+        'quiet': '',
+        'enable-local-file-access': ''
     }
 
     pdfkit.from_file(htmlFilename, outputfile, options=options)
