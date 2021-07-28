@@ -74,7 +74,7 @@ process getNumCores {
 process runPGRecon {
     validExitStatus 0,11,139
     
-    container = "mrfil/powergrid"
+    container = "mrfil/powergrid:v1.1.3"
     containerOptions = "--gpus all "
 
 
