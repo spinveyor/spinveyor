@@ -64,7 +64,7 @@ process prepMultibandDWI_SelfNavigated {
 
 process runPGReconNavigators {
 
-    container = "mrfil/powergrid"
+    container = "mrfil/powergrid:v1.1.3"
     containerOptions = "--gpus all "
 	maxForks = 1
 
