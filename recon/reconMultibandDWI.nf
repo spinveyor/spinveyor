@@ -96,7 +96,7 @@ process collectPGOutput {
 
     script:
     """
-    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); img = collectPowerGridImgOutput(); save img.mat img;"
+    matlab -nodisplay -nodesktop -r "run('${params.protonHome}/initializePaths.m'); img = collectPowerGridImgOutput(); save('img.mat','img','-v7.3');"
     """
 
 }
