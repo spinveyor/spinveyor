@@ -10,8 +10,8 @@ from minio.error import ResponseError
 
 app = Celery('SV_Worker', broker=os.environ['SPINVEYOR_BROKER'], backend=os.environ['SPINVEYOR_BROKER'])
 
-# set a 24 hour hard limit and a 22 hour soft time limit
-@app.task(time_limit=86400, soft_time_limit=79200)
+# set a 36 hour hard limit and a 34 hour soft time limit
+@app.task(time_limit=129600, soft_time_limit=122400)
 def submit_job_to_queue(recontype, bucket, senfm, imgdata, subjectID):
     # Start by forming the nextflow command
     protonHome = os.environ['PROTON_HOME']
